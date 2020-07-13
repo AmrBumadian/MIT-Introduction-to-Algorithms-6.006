@@ -17,7 +17,7 @@ int main()
     {
         temp = v[i];
         j=i-1;
-        while(j>0 and v[j]>temp)
+        while(j>=0 and v[j]>temp)
         {
             v[j+1] = v[j];
             --j;
