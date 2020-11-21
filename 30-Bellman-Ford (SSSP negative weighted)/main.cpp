@@ -39,6 +39,18 @@ void bellmanFord(int start, int n) {
             }
         }
     }
+    bool negativeCycle = false;
+    // one more iteration to check if there is a negative cycle
+    for (int j = 1; j <= n; ++j) {
+        int edges = adj[j].size();
+        for (int k = 0; k < edges; ++k) {
+            ii u = adj[j][k];
+            if (dist[u.f] > dist[j] + u.s) {
+                negativeCycle = true;
+            }
+        }
+    }
+    if (negativeCycle) cout << "The graph has a negative cycle.\n";
 
     for (int i = 1; i <= n; i++) // print the shortest distance of each node from the source
         (dist[i] == INF) ? cout << "INF " : cout << dist[i] << " ";
