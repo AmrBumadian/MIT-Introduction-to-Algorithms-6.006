@@ -2,7 +2,6 @@
 
 using namespace std;
 
-
 // loop through the array when and element <= the pivot is encountered put it in the partition before i
 // if it is > the pivot ignore it it will be swapped with an element <= the pivot in next steps
 // at the end put the pivot in its right position. The array is now partitioned around the pivot
@@ -24,22 +23,22 @@ int partition(vector<T> &a, int s, int e) {
 
 template<typename T>
 int randomPartition(vector<T> &a, int s, int e) {
-	srand(time(0));
+    srand(time(0)); // seed the generator
     int i = (rand() % (e - s + 1)) + s; // generate a random index between s and e
     swap(a[e], a[i]); // swap the element at i with the end of the subarray
     return partition(a, s, e); // partition and get a pivot for the next step
 }
 
 template<typename T>
-void quickSort(vector<T> &a, int s, int e) // sort from s to e inclusive
-{
-    if (s < e) // if the subarray to be sorted has size greater than 1
-    {
-        int r = randomPartition(a, s, e); // get random pivot
-        // the pivot is in its sorted position, hence, not included
-        quickSort(a, s, r - 1); // sort the pivot left side
-        quickSort(a, r + 1, e); // sort the pivot right side
-    }
+T find_nTh_element(vector<T> &a, int s, int e, int i) {
+    if (s == i) return a[s]; // base case, if there is only 1 element in the subarray return it
+    int q = randomPartition(a, s, e); // random partition and get pivot
+    int k = q - s + 1; // number of elements from start to pivot inclusive
+    if (i == k) return a[q]; // the pivot is in its sorted position, so if true return it
+    // else if the needed element order is less than the pivot's order, solve the left side recursively
+    else if (i < k) return find_nTh_element(a, s, q - 1, i); 
+    // else solve the right side recursively
+    else return find_nTh_element(a, q + 1, e, i - k);
 }
 
 int main() {
@@ -49,10 +48,7 @@ int main() {
 
     for (int i = 0; i < n; i++)
         cin >> a[i];
-
-    quickSort(a, 0, n - 1);
-
-    for (int i = 0; i < n; i++)
-        cout << a[i] << " ";
-    return 0;
+    int x;
+    cin >> x;
+    cout << find_nTh_element(a, 0, n - 1, x);
 }

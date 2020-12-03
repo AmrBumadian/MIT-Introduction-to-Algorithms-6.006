@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define left(i) (2*i);
-#define right(i) (2*i + 1);
-#define parent(i) ((int)i/2);
+#define LEFT(i) (2*i)
+#define RIGHT(i) (2*i + 1)
+#define parent(i) ((int)i/2)
 
 class Heap {
 private:
@@ -12,8 +12,8 @@ private:
     vector<int> heap;
 
     void maxHeapify(int idx) {
-        int l = left(idx);
-        int r = right(idx);
+        int l = LEFT(idx);
+        int r = RIGHT(idx);
         int largest = idx;
         if (l <= hSize and heap[l] > heap[idx])
             largest = l;
@@ -23,6 +23,25 @@ private:
             swap(heap[idx], heap[largest]);
             maxHeapify(largest);
         }
+    }
+
+    void iterativeMaxHeapify(int current) {
+        int largest = current;
+        int l, r;
+        int cnt = 1, idx = current;
+        do {
+            if (cnt > 1) idx = largest;
+            l = LEFT(idx);
+            r = RIGHT(idx);
+            if (l <= hSize && heap[l] > heap[idx]) {
+                largest = l;
+            }
+            if (r <= hSize && heap[r] > heap[largest]) {
+                largest = r;
+            }
+            swap(heap[idx], heap[largest]);
+            ++cnt;
+        } while (largest != idx);
     }
 
     void buildHeap() {
@@ -51,10 +70,6 @@ public:
             --hSize;
             maxHeapify(1);
         }
-    }
-
-    int heapSize() {
-        return hLength;
     }
 
     void print() {
